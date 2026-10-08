@@ -18,7 +18,7 @@
  *   - non-empty set (warm/pre-seeded)  -> no seed, seededAt written  (remember, skip enumerating)
  *   - empty set (cold)                 -> start the background seed, seededAt written, note added
  */
-import { readFileSync } from "node:fs";
+import { readHookEvent } from "./hook-event";
 import { gitHeadSha, gitLogIsCurrent, hasGitHistory, commitsSince } from "./git";
 import { DEEPEN_DIFF_TARGET } from "./status";
 import { startBackgroundSeed } from "./seed";
@@ -368,7 +368,7 @@ export async function runSessionStartHook(
   try {
     let ev: Record<string, unknown> = {};
     try {
-      ev = JSON.parse(readFileSync(0, "utf8")) as Record<string, unknown>;
+      ev = readHookEvent();
     } catch {
       return; // no/invalid event: stay silent
     }

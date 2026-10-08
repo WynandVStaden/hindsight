@@ -13,7 +13,7 @@
  * without stdin; `runRetainHook` is thin plumbing around it, mirroring `runHook`/`buildHookOutput`
  * in core/hook.ts.
  */
-import { readFileSync } from "node:fs";
+import { readHookEvent } from "./hook-event";
 import { deriveBankIdOrSkip } from "./bank";
 import { retainLiveSession } from "./chat";
 import { applyBankConfig, loadConfig } from "./config";
@@ -189,7 +189,7 @@ export async function runRetainHook(
 
   let ev: Record<string, unknown> = {};
   try {
-    ev = JSON.parse(readFileSync(0, "utf8")) as Record<string, unknown>;
+    ev = readHookEvent();
   } catch {
     return; // no/invalid event: stay silent
   }
